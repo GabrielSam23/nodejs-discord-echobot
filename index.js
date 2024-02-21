@@ -1,4 +1,4 @@
-const Discord = require('discord.js'); //import client from discord
+const Discord = require('discord.js');
 const keep_alive = require('./keep_alive.js')
 
 const client = new Discord.Client();
@@ -48,12 +48,13 @@ async function enviarOrientacao() {
 }
 
 client.on('message', async message => {
-    if (!message.content.startsWith('!') || message.author.bot) return;
+    if (!message.content.startsWith('!')) return;
 
     const args = message.content.slice(1).trim().split(/ +/);
     const command = args.shift().toLowerCase();
 
     if (command === 'enviarformulario') {
+        if (message.author.bot) return; // Evita que o bot responda ao próprio comando
         const embed = new Discord.MessageEmbed()
             .setTitle("Formulário de Admissão")
             .setDescription("Por favor, preencha o formulário abaixo com as informações solicitadas:")
@@ -105,7 +106,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
 });
 
-
 async function aceitarAdmissao(reaction, author) {
     const canal_admitidos = client.channels.cache.get(CANAL_ADMITIDOS_ID);
     if (canal_admitidos) {
@@ -137,6 +137,5 @@ async function recusarAdmissao(reaction, author) {
         console.error("Canal de admissões negadas não encontrado.");
     }
 }
-
 
 client.login(process.env.TOKEN);
