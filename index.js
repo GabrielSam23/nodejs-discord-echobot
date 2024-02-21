@@ -96,8 +96,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot) return;
 
     if (reaction.message.channel.id === FORM_CHANNEL_ID) {
-        const author_id = reaction.message.author.id;
-        const author = await client.users.fetch(author_id);
+        const author = reaction.message.author;
         if (reaction.emoji.name === '✅') {
             aceitarAdmissao(reaction, author);
         } else if (reaction.emoji.name === '❌') {
@@ -105,6 +104,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
     }
 });
+
 
 async function aceitarAdmissao(reaction, author) {
     const canal_admitidos = client.channels.cache.get(CANAL_ADMITIDOS_ID);
