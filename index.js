@@ -91,11 +91,13 @@ client.on('message', async message => {
         }
     }
 });
+// Defina um conjunto para armazenar os IDs das mensagens processadas
+const processedMessages = new Set();
 
 client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot) return;
 
-    if (reaction.message.channel.id === FORM_CHANNEL_ID) {
+    if (reaction.message.channel.id === FORM_CHANNEL_ID && !processedMessages.has(reaction.message.id)) {
         const formMessage = await reaction.message.fetch();
         const { description } = formMessage.embeds[0];
         const regex = /Respostas do formulário de <@(\d+)>:/; // Expressão regular para extrair o ID do autor
@@ -109,8 +111,11 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 recusarAdmissao(reaction, author);
             }
         }
+        // Adicione o ID da mensagem ao conjunto de mensagens processadas
+        processedMessages.add(reaction.message.id);
     }
 });
+
 
 
 async function aceitarAdmissao(reaction, author) {
