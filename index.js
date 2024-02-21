@@ -97,11 +97,17 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
     if (reaction.message.channel.id === FORM_CHANNEL_ID) {
         const formMessage = await reaction.message.fetch();
-        const { author } = formMessage.embeds[0].fields[0];
-        if (reaction.emoji.name === '✅') {
-            aceitarAdmissao(reaction, author);
-        } else if (reaction.emoji.name === '❌') {
-            recusarAdmissao(reaction, author);
+        const { description } = formMessage.embeds[0];
+        const regex = /Respostas do formulário de <@(\d+)>:/; // Expressão regular para extrair o ID do autor
+        const match = description.match(regex);
+        if (match) {
+            const authorID = match[1];
+            const author = await client.users.fetch(authorID);
+            if (reaction.emoji.name === '✅') {
+                aceitarAdmissao(reaction, author);
+            } else if (reaction.emoji.name === '❌') {
+                recusarAdmissao(reaction, author);
+            }
         }
     }
 });
