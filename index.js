@@ -105,6 +105,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
 });
 
+
 async function aceitarAdmissao(reaction, author) {
     const canal_admitidos = client.channels.cache.get(CANAL_ADMITIDOS_ID);
     if (canal_admitidos) {
@@ -136,5 +137,6 @@ async function recusarAdmissao(reaction, author) {
         console.error("Canal de admissões negadas não encontrado.");
     }
 }
+
 
 client.login(process.env.TOKEN);
