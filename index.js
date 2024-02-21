@@ -96,7 +96,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot) return;
 
     if (reaction.message.channel.id === FORM_CHANNEL_ID) {
-        const author = reaction.message.author;
+        const formMessage = await reaction.message.fetch();
+        const { author } = formMessage.embeds[0].fields[0];
         if (reaction.emoji.name === '✅') {
             aceitarAdmissao(reaction, author);
         } else if (reaction.emoji.name === '❌') {
